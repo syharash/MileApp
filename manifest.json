@@ -1,6 +1,6 @@
 {
-  "name": "Mileage Tracker",
-  "short_name": "MileageApp",
+  "name": "Mile App",
+  "short_name": "MileApp",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#f4f4f4",
@@ -19,7 +19,13 @@
       "sizes": "512x512",
       "type": "image/png"
     },
-   
+     {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+
   ],
   "id": "/?source=pwa",
   "categories": [
