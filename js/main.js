@@ -1,15 +1,15 @@
 // main.js
 
-import { toggleDebug, syncDebugUI } from './debug.js';
+import { toggleDebug, syncDebugUI } from './js/debug.js';
 import {
   startTracking,
   pauseTracking,
   resumeTracking,
   endTracking
-} from './tracking.js';
-import { downloadCSV, clearHistory } from './log.js';
-import { toggleHelp, updateStatus, updateControls, showToast } from './ui.js';
-import { initMapServices, clearDirections } from './map.js';
+} from './js/tracking.js';
+import { downloadCSV, clearHistory } from './js/log.js';
+import { toggleHelp, updateStatus, updateControls, showToast } from './js/ui.js';
+import { initMapServices, clearDirections } from './js/map.js';
 
 // Optional: preload interface
 window.onload = () => {
