@@ -1,7 +1,7 @@
 // tracking.js
-import { getRoute } from './map.js';
-import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './ui.js';
-import { logTrip } from './log.js';
+import { getRoute } from './js/map.js';
+import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './js/ui.js';
+import { logTrip } from './js/log.js';
 
 let tracking = false;
 let tripStatus = 'idle';
