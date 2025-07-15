@@ -1,4 +1,5 @@
 // tracking.js
+import { updateDebugBadge } from './js/ui.js';
 import { getRoute } from './js/map.js';
 import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './js/ui.js';
 import { logTrip } from './js/log.js';
@@ -28,6 +29,7 @@ export function startTracking() {
     updateStatus("Tracking");
     showToast("🚀 Trip started!");
     updateControls();
+    updateDebugBadge();
   }, () => showToast("⚠️ Unable to access GPS", "error"));
 }
 
@@ -39,6 +41,7 @@ export function pauseTracking() {
   updateStatus("Paused");
   showToast("⏸️ Trip paused");
   updateControls();
+  updateDebugBadge();
 }
 
 export function resumeTracking() {
@@ -53,6 +56,7 @@ export function resumeTracking() {
   updateStatus("Tracking");
   showToast("▶️ Trip resumed");
   updateControls();
+  updateDebugBadge();
 }
 
 export async function endTracking() {
@@ -82,6 +86,7 @@ export async function endTracking() {
         showToast(`⚠️ ${error}`, "error");
         updateStatus("Error");
         updateControls();
+        updateDebugBadge();
         return;
       }
 
@@ -114,9 +119,11 @@ export async function endTracking() {
 
     updateStatus("Trip Complete");
     updateControls();
+    updateDebugBadge();
     tripData.start = tripData.end = null;
   }, () => {
     showToast("⚠️ GPS access failed", "error");
     updateStatus("Trip Complete");
+    updateDebugBadge();
   });
 }
