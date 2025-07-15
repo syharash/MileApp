@@ -20,17 +20,18 @@ function initMapServices() {
 async function getRoute(start, end) {
   if (!start || !end) {
     console.warn("Missing start or end location:", { start, end });
-    alert("Route calculation failed: Missing location data.");
-    return;
+    return { error: "Missing location data." };
   }
 
-  if (
-    typeof start.latitude !== "number" || typeof start.longitude !== "number" ||
-    typeof end.latitude !== "number" || typeof end.longitude !== "number"
-  ) {
+  const coordsValid =
+    typeof start.latitude === "number" &&
+    typeof start.longitude === "number" &&
+    typeof end.latitude === "number" &&
+    typeof end.longitude === "number";
+
+  if (!coordsValid) {
     console.warn("Invalid coordinates:", { start, end });
-    alert("Route calculation failed: Invalid coordinates.");
-    return;
+    return { error: "Invalid coordinates." };
   }
 
   try {
@@ -48,10 +49,10 @@ async function getRoute(start, end) {
         }
       );
     });
-    return result;
+    return { data: result };
   } catch (error) {
     console.error("Route calculation error:", error);
-    alert("Unable to calculate route. Please try again later.");
+    return { error: "Unable to calculate route. Try again later." };
   }
 }
 
@@ -79,4 +80,19 @@ function clearDirections() {
   if (panel) panel.innerHTML = "";
 }
 
-export { initMapServices, getRoute, renderSteps, clearDirections };
+function getMapSnapshot() {
+  return map
+    ? {
+        center: map.getCenter().toJSON(),
+        zoom: map.getZoom()
+      }
+    : null;
+}
+
+export {
+  initMapServices,
+  getRoute,
+  renderSteps,
+  clearDirections,
+  getMapSnapshot
+};
