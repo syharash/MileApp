@@ -2,9 +2,9 @@ const CACHE_NAME = "mileage-tracker-cache-v1";
 const urlsToCache = [
   "./",
   "./index.html",
-  "./app.js",
-  "./style.css",
-  "./manifest.json"
+  "./js/app.js",
+  "./css/style.css",
+  "./json/manifest.json"
 ];
 
 // Install cache
