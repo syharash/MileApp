@@ -66,7 +66,7 @@ export async function endTracking() {
     console.log("📍 Trip End:", tripData.end.latitude, tripData.end.longitude);
 
     if (!tripData.start || !tripData.end) {
-      alert("Trip cannot be ended: Missing location data.");
+      showToast("❌ Trip cannot be ended: Missing location data.", "error");
       console.warn("Missing tripStart or tripEnd");
       return;
     }
@@ -76,31 +76,37 @@ export async function endTracking() {
     tripData.tracking = false;
 
     try {
-      const result = await getRoute(tripData.start, tripData.end);
-      if (result) {
-        const leg = result.routes[0].legs[0];
-        const distanceMi = (leg.distance.value / 1609.34).toFixed(2);
-        const durationMin = Math.round(leg.duration.value / 60);
-        const pausedMin = Math.round(tripData.pausedDuration / 60000);
-        const purpose = document.getElementById("trip-purpose").value || "–";
-        const notes = document.getElementById("trip-notes").value || "–";
+      const { data, error } = await getRoute(tripData.start, tripData.end);
 
-        safeUpdate("summary-purpose", purpose);
-        safeUpdate("summary-notes", notes);
-        safeUpdate("summary-start", leg.start_address);
-        safeUpdate("summary-end", leg.end_address);
-        safeUpdate("summary-distance", `${distanceMi} mi`);
-        safeUpdate("summary-duration", `${durationMin} min`);
-        safeUpdate("pause-summary", `${pausedMin} min`);
-        safeUpdate("lastDistance", `${distanceMi} mi`);
-        safeUpdate("lastDuration", `${durationMin} min`);
-
-        renderSteps(leg.steps);
-        logTrip(purpose, notes, distanceMi, durationMin, pausedMin);
-        showToast(`✅ Trip complete: ${distanceMi} mi`);
-      } else {
-        showToast("⚠️ No route returned", "error");
+      if (error) {
+        showToast(`⚠️ ${error}`, "error");
+        updateStatus("Error");
+        updateControls();
+        return;
       }
+
+      const leg = data.routes[0].legs[0];
+      const distanceMi = (leg.distance.value / 1609.34).toFixed(2);
+      const durationMin = Math.round(leg.duration.value / 60);
+      const pausedMin = Math.round(tripData.pausedDuration / 60000);
+      const startAddress = leg.start_address;
+      const endAddress = leg.end_address;
+      const purpose = document.getElementById("trip-purpose").value || "–";
+      const notes = document.getElementById("trip-notes").value || "–";
+
+      safeUpdate("summary-purpose", purpose);
+      safeUpdate("summary-notes", notes);
+      safeUpdate("summary-start", startAddress);
+      safeUpdate("summary-end", endAddress);
+      safeUpdate("summary-distance", `${distanceMi} mi`);
+      safeUpdate("summary-duration", `${durationMin} min`);
+      safeUpdate("pause-summary", `${pausedMin} min`);
+      safeUpdate("lastDistance", `${distanceMi} mi`);
+      safeUpdate("lastDuration", `${durationMin} min`);
+
+      renderSteps(leg.steps);
+      logTrip(purpose, notes, distanceMi, durationMin, pausedMin);
+      showToast(`✅ Trip complete: ${distanceMi} mi`);
     } catch (err) {
       console.error("endTracking() error:", err);
       showToast("❌ " + err.message, "error");
@@ -113,8 +119,4 @@ export async function endTracking() {
     showToast("⚠️ GPS access failed", "error");
     updateStatus("Trip Complete");
   });
-}
-
-export function getTripState() {
-  return { ...tripData };
 }
