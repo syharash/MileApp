@@ -1,4 +1,5 @@
 // ui.js
+import { getTripState } from './js/tracking.js';
 
 function updateStatus(state) {
   const el = document.getElementById("tracking-status");
@@ -53,5 +54,21 @@ function toggleHelp() {
     console.warn("🆘 Help screen not found.");
   }
 }
+
+export function updateDebugBadge() {
+  const { status, tracking, pausedDuration } = getTripState();
+  const badge = document.getElementById("debugBadge");
+  if (!badge) return;
+
+  const stateMap = {
+    idle: "🛠 Idle",
+    tracking: "🚗 Tracking",
+    paused: `⏸️ Paused (${Math.round(pausedDuration / 60000)} min)`,
+    resumed: "▶️ Resumed",
+  };
+
+  badge.textContent = stateMap[status] || `🛠 ${status}`;
+}
+
 
 export { updateStatus, updateControls, showToast, safeUpdate, toggleHelp };
