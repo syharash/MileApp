@@ -116,3 +116,35 @@ async function endTracking() {
     updateStatus("Trip Complete");
   });
 }
+
+// === Restore Last Trip ===
+function restoreLastTrip() {
+  const cached = localStorage.getItem("lastRoute");
+  if (!cached) {
+    showToast("🕵️ No saved trip to restore");
+    return;
+  }
+
+  const result = JSON.parse(cached);
+  const leg = result.routes[0].legs[0];
+
+  directionsRenderer.setDirections(result);
+
+  safeUpdate("summary-start", leg.start_address);
+  safeUpdate("summary-end", leg.end_address);
+  safeUpdate("summary-distance", `${(leg.distance.value / 1609.34).toFixed(2)} mi`);
+  safeUpdate("summary-duration", `${Math.round(leg.duration.value / 60)} min`);
+
+  const panel = document.getElementById("directions-panel");
+  panel.innerHTML = "";
+
+  result.routes[0].legs.forEach((leg, index) => {
+    const header = document.createElement("h4");
+    header.textContent = `Leg ${index + 1}: ${leg.start_address} → ${leg.end_address}`;
+    panel.appendChild(header);
+    renderSteps(leg.steps);
+  });
+
+  showToast("🔄 Last trip restored");
+}
+
