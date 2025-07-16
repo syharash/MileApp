@@ -70,5 +70,18 @@ export function updateDebugBadge() {
   badge.textContent = stateMap[status] || `🛠 ${status}`;
 }
 
+export function clearTripUI() {
+  safeUpdate("summary-purpose", "–");
+  safeUpdate("summary-notes", "–");
+  safeUpdate("summary-start", "–");
+  safeUpdate("summary-end", "–");
+  safeUpdate("summary-distance", "–");
+  safeUpdate("summary-duration", "–");
+  safeUpdate("pause-summary", "–");
+  document.getElementById("trip-purpose").value = "";
+  document.getElementById("trip-notes").value = "";
+  document.getElementById("rate").value = "";
+}
+
 
 export { updateStatus, updateControls, showToast, safeUpdate, toggleHelp };
