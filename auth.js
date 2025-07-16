@@ -7,7 +7,10 @@ function handleLogin(response) {
   document.querySelector(".container").style.display = "block";
   document.getElementById("login-screen").style.display = "none";
   document.querySelector(".container").style.display = "block";
+  const rateInput = document.getElementById("rate");
+  if (rateInput) rateInput.value = "0.655";
   loadTripHistory();
+  updateControls();
   showToast("✅ Signed in successfully");
 }
 
