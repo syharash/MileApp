@@ -107,6 +107,33 @@ button:hover:not(:disabled) {
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   display: none;
 }
+
+/* === Transitions === */
+.sidebar, .map-panel, #trip-summary, #directions-panel {
+  transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled),
+button:focus-visible {
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#trip-timer {
+  transition: opacity 0.3s ease;
+}
+
+/* === Sticky Status Bar === */
+#status-bar {
+  position: sticky;
+  top: 0;
+  background: #eef;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1em;
+  border-bottom: 1px solid #ccc;
+  z-index: 999;
+}
+
 /* === Map & Directions === */
 #map {
   height: 300px;
