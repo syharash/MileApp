@@ -7,7 +7,7 @@
   <title>Mileage Tracker</title>
 
   <!-- PWA Setup -->
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="./json/manifest.json" />
   <link rel="icon" type="image/png" href="icon/icon-192.png" sizes="192x192" />
   <link rel="apple-touch-icon" href="icon/icon-512.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -21,7 +21,7 @@
 </head>
 <body>
   <header>
-    <h1>📍 Mileage Tracker</h1>
+    <h1>📍 Miles and Money </h1>
     <div id="tracking-status">Idle</div>
     <span id="debugBadge" class="badge">🛠 Debug ON</span>
   </header>
@@ -78,5 +78,9 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
   </main>
+  <div id="debugPanel" class="debug-panel" style="display: none;">
+    <pre id="debugContent"></pre>
+    <button id="copyDebugBtn">📋 Copy Debug</button>
+  </div>
 </body>
 </html>
