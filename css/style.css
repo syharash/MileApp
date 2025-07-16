@@ -139,3 +139,21 @@ button:disabled {
     font-size: 1rem;
   }
 }
+
+/* === Debug Panel === */
+.debug-panel {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: #222;
+  color: #eee;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  z-index: 1000;
+  max-width: 300px;
+}
+.debug-panel button {
+  margin-top: 8px;
+  font-size: 0.8em;
+}
