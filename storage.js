@@ -55,7 +55,14 @@ function updateSummary() {
   let today = 0, week = 0;
   const todayDate = new Date().toDateString();
   const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
-  const rate = parseFloat(document.getElementById("rate").value || "0");
+  const rateInput = document.getElementById("rate");
+  const todayEl = document.getElementById("today-summary");
+  const weekEl = document.getElementById("week-summary");
+
+  // ✅ Exit early if any required element is missing
+  if (!rateInput || !todayEl || !weekEl) return;
+
+  const rate = parseFloat(rateInput.value || "0");
 
   tripLog.forEach(t => {
     const d = new Date(t.date);
@@ -64,8 +71,8 @@ function updateSummary() {
     if (d.getTime() >= weekAgo) week += m;
   });
 
-  document.getElementById("today-summary").textContent = `${today.toFixed(2)} mi | $${(today * rate).toFixed(2)}`;
-  document.getElementById("week-summary").textContent = `${week.toFixed(2)} mi | $${(week * rate).toFixed(2)}`;
+  todayEl.textContent = `${today.toFixed(2)} mi | $${(today * rate).toFixed(2)}`;
+  weekEl.textContent = `${week.toFixed(2)} mi | $${(week * rate).toFixed(2)}`;
 }
 
 // === CSV Export ===
