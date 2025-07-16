@@ -1,11 +1,11 @@
 // tracking.js
-import { updateDebugBadge } from '/ui.js';
-import { getRoute } from '/map.js';
-import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from '/ui.js';
-import { logTrip } from '/log.js';
-import { startLiveTracking } from '/map.js';
-import { stopLiveTracking, clearDirections } from '/map.js';
-import { clearTripUI } from '/ui.js';
+import { updateDebugBadge } from './ui.js';
+import { getRoute } from './map.js';
+import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './ui.js';
+import { logTrip } from './log.js';
+import { startLiveTracking } from './map.js';
+import { stopLiveTracking, clearDirections } from './map.js';
+import { clearTripUI } from './ui.js';
 
 const tripData = {
   status: 'idle',
