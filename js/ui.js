@@ -83,5 +83,23 @@ export function clearTripUI() {
   document.getElementById("rate").value = "";
 }
 
+export function updateDebugPanel() {
+  const state = getTripState();
+  const panel = document.getElementById("debugPanel");
+  const pre = document.getElementById("debugContent");
+  if (!panel || !pre) return;
+
+  panel.style.display = "block";
+  pre.textContent = JSON.stringify(state, null, 2);
+}
+
+export function initDebugCopy() {
+  const btn = document.getElementById("copyDebugBtn");
+  btn?.addEventListener("click", () => {
+    const state = getTripState();
+    navigator.clipboard.writeText(JSON.stringify(state, null, 2));
+  });
+}
+
 
 export { updateStatus, updateControls, showToast, safeUpdate, toggleHelp };
