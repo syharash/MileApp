@@ -1,3 +1,4 @@
+/* === Base Styles === */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -12,24 +13,38 @@ body {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* === Headings === */
 h2, h3, h4 {
   margin-top: 1.5em;
   color: #222;
 }
 
+/* === Form Fields === */
 .field-group {
   margin-bottom: 1em;
 }
 
-input, textarea {
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
   width: 100%;
   padding: 8px;
   margin-top: 4px;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
+/* === Buttons === */
 .button-group {
   display: flex;
   flex-wrap: wrap;
@@ -41,11 +56,44 @@ button {
   padding: 10px 16px;
   font-size: 1em;
   cursor: pointer;
+  background-color: #0078D4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.2s ease;
 }
 
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #005ea2;
+}
+
+/* === Trip Log === */
+#trip-log {
+  list-style: none;
+  padding-left: 0;
+}
+
+#trip-log li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* === Summary === */
+#trip-summary p {
+  margin: 4px 0;
+}
+
+/* === Map & Directions === */
 #map {
   height: 300px;
   margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 #directions-panel {
@@ -67,6 +115,7 @@ button {
   margin-bottom: 8px;
 }
 
+/* === Toast Messages === */
 #toast {
   position: fixed;
   bottom: 20px;
@@ -77,12 +126,14 @@ button {
   padding: 10px 20px;
   border-radius: 6px;
   display: none;
+  z-index: 1000;
 }
 
 #toast.show {
   display: block;
 }
 
+/* === User Badge === */
 #userBadge {
   background-color: #eef;
   padding: 6px 12px;
@@ -90,4 +141,27 @@ button {
   display: inline-block;
   font-size: 0.9em;
   margin-bottom: 10px;
+}
+
+/* === Help Screen === */
+#help-screen {
+  background: #f0f8ff;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
+#help-screen h3 {
+  margin-top: 0;
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  .button-group {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
 }
