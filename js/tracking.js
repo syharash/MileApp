@@ -3,6 +3,7 @@ import { updateDebugBadge } from './js/ui.js';
 import { getRoute } from './js/map.js';
 import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './js/ui.js';
 import { logTrip } from './js/log.js';
+import { startLiveTracking } from './js/log.js'
 
 const tripData = {
   status: 'idle',
@@ -25,6 +26,7 @@ export function startTracking() {
     console.log("📍 Trip Start:", tripData.start.latitude, tripData.start.longitude);
 
     tripData.tracking = true;
+    startLiveTracking();
     tripData.pausedDuration = 0;
     updateStatus("Tracking");
     showToast("🚀 Trip started!");
