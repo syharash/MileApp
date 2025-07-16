@@ -1,7 +1,7 @@
 // index.js
 
 // Load the main app logic
-import './js/main.js';
+import './main.js';
 import { initDebugCopy } from './js/ui.js';
 initDebugCopy();
 
