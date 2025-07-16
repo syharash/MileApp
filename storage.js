@@ -1,5 +1,7 @@
 let tripLog = [];
+let filteredLog = [];
 
+// === Trip Logging ===
 function logTrip(purpose, notes, distance, duration, paused) {
   const rate = parseFloat(document.getElementById("rate").value || "0");
   const reimbursement = (distance * rate).toFixed(2);
@@ -14,13 +16,12 @@ function logTrip(purpose, notes, distance, duration, paused) {
   };
   tripLog.push(entry);
   saveTripHistory();
-
-  const li = document.createElement("li");
-  li.textContent = `${entry.date} | ${entry.purpose} | ${entry.miles} mi | ${entry.reimbursement}`;
-  document.getElementById("trip-log").appendChild(li);
+  syncToGoogleSheets(entry);
+  renderTripLog();
   updateSummary();
 }
 
+// === Save & Load ===
 function saveTripHistory() {
   const user = localStorage.getItem("userEmail") || "default";
   localStorage.setItem(`tripHistory_${user}`, JSON.stringify(tripLog));
@@ -31,15 +32,24 @@ function loadTripHistory() {
   const saved = localStorage.getItem(`tripHistory_${user}`);
   if (saved) {
     tripLog = JSON.parse(saved);
-    tripLog.forEach(entry => {
-      const li = document.createElement("li");
-      li.textContent = `${entry.date} | ${entry.purpose} | ${entry.miles} mi | ${entry.reimbursement}`;
-      document.getElementById("trip-log").appendChild(li);
-    });
+    filteredLog = [...tripLog];
+    renderTripLog();
     updateSummary();
   }
 }
 
+// === Render Trip Log ===
+function renderTripLog() {
+  const list = document.getElementById("trip-log");
+  list.innerHTML = "";
+  filteredLog.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = `${entry.date} | ${entry.purpose} | ${entry.miles} mi | ${entry.reimbursement}`;
+    list.appendChild(li);
+  });
+}
+
+// === Summary ===
 function updateSummary() {
   let today = 0, week = 0;
   const todayDate = new Date().toDateString();
@@ -57,24 +67,61 @@ function updateSummary() {
   document.getElementById("week-summary").textContent = `${week.toFixed(2)} mi | $${(week * rate).toFixed(2)}`;
 }
 
+// === CSV Export ===
 function downloadCSV() {
-  if (!tripLog.length) return showToast("📂 No trips to export");
+  if (!filteredLog.length) return showToast("📂 No trips to export");
   let csv = "Date,Purpose,Notes,Miles,Duration,Paused,Reimbursement\n";
-  tripLog.forEach(t => {
+  filteredLog.forEach(t => {
     csv += `${t.date},${t.purpose},${t.notes},${t.miles},${t.duration},${t.paused},${t.reimbursement}\n`;
   });
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "mileage_log.csv";
+  a.download = "filtered_mileage_log.csv";
   a.click();
   URL.revokeObjectURL(url);
 }
 
+// === Clear History ===
 function clearHistory() {
   tripLog = [];
+  filteredLog = [];
   document.getElementById("trip-log").innerHTML = "";
   updateSummary();
+  saveTripHistory();
   showToast("🧹 Trip history cleared");
+}
+
+// === Filtering ===
+function filterTrips({ startDate, endDate, purpose }) {
+  filteredLog = tripLog.filter(entry => {
+    const entryDate = new Date(entry.date);
+    const matchesDate = (!startDate || entryDate >= new Date(startDate)) &&
+                        (!endDate || entryDate <= new Date(endDate));
+    const matchesPurpose = !purpose || entry.purpose.toLowerCase().includes(purpose.toLowerCase());
+    return matchesDate && matchesPurpose;
+  });
+  renderTripLog();
+  updateSummary();
+}
+
+// === Google Sheets Sync ===
+function syncToGoogleSheets(entry) {
+  const scriptURL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+  const payload = {
+    email: localStorage.getItem("userEmail") || "unknown",
+    ...entry
+  };
+
+  fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors", // Use "cors" if your script returns JSON
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  }).catch(err => {
+    console.warn("⚠️ Google Sheets sync failed:", err);
+  });
 }
