@@ -81,6 +81,12 @@ function downloadCSV(useFiltered = false) {
     return;
   }
 
+  // === Generate Timestamp ===
+  const now = new Date();
+  const pad = n => n.toString().padStart(2, "0");
+  const timestamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+
+  // === Build CSV ===
   let csv = "Date,Purpose,Notes,Miles,Duration,Paused,Reimbursement\n";
   source.forEach(t => {
     csv += `${t.date},${t.purpose},${t.notes},${t.miles},${t.duration},${t.paused},${t.reimbursement}\n`;
@@ -90,7 +96,9 @@ function downloadCSV(useFiltered = false) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = useFiltered ? "filtered_mileage_log.csv" : "mileage_log.csv";
+  a.download = useFiltered
+    ? `filtered_mileage_log_${timestamp}.csv`
+    : `mileage_log_${timestamp}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
