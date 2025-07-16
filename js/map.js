@@ -1,5 +1,6 @@
 // map.js
-
+let gpsPath = [];
+let livePolyLine = null;
 let map;
 let directionsService;
 let directionsRenderer;
@@ -96,3 +97,28 @@ export {
   clearDirections,
   getMapSnapshot
 };
+
+export function startLiveTracking() {
+  gpsPath = []; // reset path
+  livePolyline = new google.maps.Polyline({
+    path: gpsPath,
+    geodesic: true,
+    strokeColor: "#00b3b3",
+    strokeOpacity: 0.6,
+    strokeWeight: 5,
+    map
+  });
+
+  navigator.geolocation.watchPosition(pos => {
+    const point = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    gpsPath.push(point);
+    livePolyline.setPath(gpsPath);
+  }, err => {
+    console.warn("Live GPS error:", err);
+  }, {
+    enableHighAccuracy: true,
+    maximumAge: 5000,
+    timeout: 10000
+  });
+}
+
