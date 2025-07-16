@@ -108,7 +108,7 @@ function filterTrips({ startDate, endDate, purpose }) {
 
 // === Google Sheets Sync ===
 function syncToGoogleSheets(entry) {
-  const scriptURL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwd-_EuMr0Jy51_yYdMQpvVPSJNcKzMuU0RFla76qFgVsCb85DyBLCkkqXJ_Uk5L2iS/exec";
   const payload = {
     email: localStorage.getItem("userEmail") || "unknown",
     ...entry
