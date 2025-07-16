@@ -5,6 +5,7 @@ import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from
 import { logTrip } from './js/log.js';
 import { startLiveTracking } from './js/map.js';
 import { stopLiveTracking, clearDirections } from './js/map.js';
+import { clearTripUI } from './js/ui.js';
 
 const tripData = {
   status: 'idle',
@@ -144,4 +145,5 @@ export async function endTracking() {
 clearDirections();
 stopLiveTracking();
 resetTripData();
+clearTripUI();
 
