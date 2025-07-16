@@ -11,14 +11,6 @@
   <!-- Google Identity -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-
-   <!-- Google Maps API -->
-  <script
-    async
-    defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAInvy6GdRdnuYVJGlde1gX0VINpU5AsJI&libraries=places&callback=initMapServices">
-  </script>
-  
 </head>
 
 <body>
@@ -39,7 +31,7 @@
 
   <!-- App UI -->
   <div class="container" style="display:none;">
-    <h2>Mileage Tracker 🚗</h2>
+    <h2> Calculate Miles and Money 🚗</h2>
     <p id="userBadge"></p>
 
     <!-- Trip Details -->
@@ -67,6 +59,25 @@
       <button id="logoutBtn">Logout</button>
     </div>
 
+    <!-- Filter UI -->
+    <h3>🔍 Filter Trips</h3>
+    <div class="field-group">
+      <label for="filter-start">Start Date:</label>
+      <input type="date" id="filter-start" />
+    </div>
+    <div class="field-group">
+      <label for="filter-end">End Date:</label>
+      <input type="date" id="filter-end" />
+    </div>
+    <div class="field-group">
+      <label for="filter-purpose">Purpose / Client:</label>
+      <input type="text" id="filter-purpose" placeholder="e.g. Site visit" />
+    </div>
+    <div class="button-group">
+      <button onclick="applyFilters()">Apply Filters</button>
+      <button onclick="resetFilters()">Reset Filters</button>
+    </div>
+
     <!-- Trip Log -->
     <h3>Trip Log 📍</h3>
     <ul id="trip-log"></ul>
@@ -90,7 +101,7 @@
       <p><strong>Last Duration:</strong> <span id="lastDuration">–</span></p>
     </div>
 
-    <!-- Map & Directions -->
+   <!-- Map & Directions -->
     <div id="map"></div>
     <div id="directions-panel"></div>
 
@@ -106,7 +117,14 @@
 
     <!-- Toast -->
     <div id="toast"></div>
-  </div>
+  </div> <!-- End of .container -->
+
+ <!-- Google Maps API -->
+  <script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAInvy6GdRdnuYVJGlde1gX0VINpU5AsJI&libraries=places&callback=initMapServices">
+  </script>
 
   <!-- Scripts -->
   <script src="auth.js"></script>
@@ -115,5 +133,22 @@
   <script src="storage.js"></script>
   <script src="ui.js"></script>
   <script src="main.js"></script>
+
+  <!-- Filter Logic -->
+  <script>
+    function applyFilters() {
+      const startDate = document.getElementById("filter-start").value;
+      const endDate = document.getElementById("filter-end").value;
+      const purpose = document.getElementById("filter-purpose").value;
+      filterTrips({ startDate, endDate, purpose });
+    }
+
+    function resetFilters() {
+      document.getElementById("filter-start").value = "";
+      document.getElementById("filter-end").value = "";
+      document.getElementById("filter-purpose").value = "";
+      filterTrips({});
+    }
+  </script>
 </body>
 </html>
