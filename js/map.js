@@ -1,6 +1,7 @@
 // map.js
 let gpsPath = [];
 let livePolyLine = null;
+let watchId = null;
 let map;
 let directionsService;
 let directionsRenderer;
@@ -109,7 +110,7 @@ export function startLiveTracking() {
     map
   });
 
-  navigator.geolocation.watchPosition(pos => {
+  watchId = navigator.geolocation.watchPosition(pos => {
     const point = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
     gpsPath.push(point);
     livePolyline.setPath(gpsPath);
@@ -121,4 +122,17 @@ export function startLiveTracking() {
     timeout: 10000
   });
 }
+
+export function stopLiveTracking() {
+  if (watchId !== null) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+  if (livePolyline) {
+    livePolyline.setMap(null);
+    livePolyline = null;
+  }
+  gpsPath = [];
+}
+
 
