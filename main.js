@@ -35,3 +35,13 @@ window.onload = function () {
     if (panel) panel.innerHTML = "";
   }
 };
+
+function handleMenuAction(action) {
+  switch (action) {
+    case "start": startTracking(); break;
+    case "pause": pauseTracking(); break;
+    case "resume": resumeTracking(); break;
+    case "end": endTracking(); break;
+    case "download": downloadCSV(false); break;
+  }
+}
