@@ -5,6 +5,8 @@ function handleLogin(response) {
   showToast(`👋 Welcome, ${user.name}`);
   document.getElementById("userBadge").textContent = `Logged in as: ${user.name} (${user.email})`;
   document.querySelector(".container").style.display = "block";
+  document.getElementById("login-screen").style.display = "none";
+  document.querySelector(".container").style.display = "block";
   loadTripHistory();
 }
 
