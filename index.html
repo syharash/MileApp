@@ -2,85 +2,110 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#2c2c2c" />
-  <title>Miles and Money</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mileage Tracker App</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
-  <!-- PWA Setup -->
-  <link rel="manifest" href="./json/manifest.json" />
-  <link rel="icon" type="image/png" href="./icon/icon-192.png" sizes="192x192" />
-  <link rel="apple-touch-icon" href="./icon/icon-512.png" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="./css/style.css" />
-
-  <!-- Entry Point Script -->
-  <script type="module" src="./js/index.js" defer></script>
+  <!-- Google Identity -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
+
 <body>
-  <header>
-    <h1>📍 Miles and Money </h1>
-    <div id="tracking-status">Idle</div>
-    <span id="debugBadge" class="badge">🛠 Debug ON</span>
-  </header>
+  <!-- Google Sign-In -->
+  <div id="g_id_onload"
+    data-client_id="YOUR_CLIENT_ID"
+    data-callback="handleLogin"
+    data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin"
+    data-type="standard"
+    data-size="large"
+    data-theme="outline"
+    data-text="sign_in_with"
+    data-shape="rectangular"
+    data-logo_alignment="left">
+  </div>
 
-  <main>
-    <!-- Trip Controls -->
-    <section class="controls">
+  <!-- App UI -->
+  <div class="container" style="display:none;">
+    <h2>Mileage Tracker 🚗</h2>
+    <p id="userBadge"></p>
+
+    <!-- Trip Details -->
+    <div class="field-group">
+      <label for="trip-purpose">Purpose / Client:</label>
+      <input type="text" id="trip-purpose" placeholder="e.g. Site visit" />
+    </div>
+    <div class="field-group">
+      <label for="trip-notes">Notes:</label>
+      <textarea id="trip-notes" rows="2" placeholder="Any observations…"></textarea>
+    </div>
+    <label for="rate">Reimbursement Rate ($/mi):</label>
+    <input type="number" id="rate" value="0.655" step="0.001" />
+
+    <!-- Buttons -->
+    <div class="button-group">
       <button id="startTrackingBtn">Start Trip</button>
-      <button id="pauseTrackingBtn">Pause</button>
-      <button id="resumeTrackingBtn">Resume</button>
-      <button id="endTrackingBtn">End Trip</button>
-    </section>
+      <button id="pauseTrackingBtn" disabled>Pause Trip</button>
+      <button id="resumeTrackingBtn" disabled>Resume Trip</button>
+      <button id="endTrackingBtn" disabled>End Trip</button>
+      <button id="downloadCSVBtn">Download CSV</button>
+      <button id="clearHistoryBtn">Clear History</button>
+      <button id="toggleHelpBtn">Help</button>
+      <button id="restoreTrip">Restore Last Trip</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
 
-    <!-- Input Fields -->
-    <section class="inputs">
-      <input id="trip-purpose" type="text" placeholder="Purpose of trip" />
-      <textarea id="trip-notes" placeholder="Notes (optional)"></textarea>
-      <input id="rate" type="number" step="0.01" placeholder="Rate per mile ($)" />
-    </section>
+    <!-- Trip Log -->
+    <h3>Trip Log 📍</h3>
+    <ul id="trip-log"></ul>
 
     <!-- Summary -->
-    <section class="summary">
-      <h3>Trip Summary</h3>
-      <p>Purpose: <span id="summary-purpose">–</span></p>
-      <p>Notes: <span id="summary-notes">–</span></p>
-      <p>Start: <span id="summary-start">–</span></p>
-      <p>End: <span id="summary-end">–</span></p>
-      <p>Distance: <span id="summary-distance">–</span></p>
-      <p>Duration: <span id="summary-duration">–</span></p>
-      <p>Paused: <span id="pause-summary">–</span></p>
-    </section>
+    <h3>Summary 🧾</h3>
+    <p><strong>Today:</strong> <span id="today-summary">0 mi | $0.00</span></p>
+    <p><strong>This Week:</strong> <span id="week-summary">0 mi | $0.00</span></p>
 
-    <!-- Export & History -->
-    <section class="history">
-      <h3>Trip Log</h3>
-      <ul id="trip-log"></ul>
-      <button id="downloadCSVBtn">📂 Export CSV</button>
-      <button id="clearHistoryBtn">🧹 Clear History</button>
-    </section>
+    <div id="trip-summary">
+      <h4>🧭 Last Trip Summary</h4>
+      <p><strong>Status:</strong> <span id="tracking-status">Idle</span></p>
+      <p><strong>Purpose:</strong> <span id="summary-purpose">–</span></p>
+      <p><strong>Notes:</strong> <span id="summary-notes">–</span></p>
+      <p><strong>Start:</strong> <span id="summary-start">–</span></p>
+      <p><strong>End:</strong> <span id="summary-end">–</span></p>
+      <p><strong>Distance:</strong> <span id="summary-distance">0 mi</span></p>
+      <p><strong>Duration:</strong> <span id="summary-duration">–</span></p>
+      <p><strong>Paused Time:</strong> <span id="pause-summary">0 min</span></p>
+      <p><strong>Last Distance:</strong> <span id="lastDistance">–</span></p>
+      <p><strong>Last Duration:</strong> <span id="lastDuration">–</span></p>
+    </div>
 
-    <!-- Directions Panel -->
-    <section id="directions-panel"></section>
+    <!-- Map & Directions -->
+    <div id="map"></div>
+    <div id="directions-panel"></div>
 
-    <!-- Help & Debug -->
-    <section class="tools">
-      <button id="toggleHelpBtn">❓ Help</button>
-      <button id="enableDebugBtn">👀 Enable Debug</button>
-    </section>
+    <!-- Help -->
+    <div id="help-screen" style="display:none;">
+      <h3>📘 Help Guide</h3>
+      <p>1. Fill in purpose & notes.</p>
+      <p>2. Tap “Start Trip” to begin.</p>
+      <p>3. Pause/resume as needed.</p>
+      <p>4. Tap “End Trip” to finalize and view recap.</p>
+      <p>5. Export CSV or clear history.</p>
+    </div>
 
-    <section id="help-screen" style="display: none;">
-      <p>This app helps you track your mileage, calculate reimbursement, and log trip history. Enter your trip purpose and notes, then hit "Start Trip" to begin.</p>
-    </section>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
-  </main>
-  <div id="debugPanel" class="debug-panel" style="display: none;">
-    <pre id="debugContent"></pre>
-    <button id="copyDebugBtn">📋 Copy Debug</button>
+    <!-- Toast -->
+    <div id="toast"></div>
   </div>
+
+  <!-- Scripts -->
+  <script src="auth.js"></script>
+  <script src="map.js"></script>
+  <script src="tracking.js"></script>
+  <script src="storage.js"></script>
+  <script src="ui.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
