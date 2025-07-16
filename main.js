@@ -1,5 +1,5 @@
 window.onload = function () {
-  initMapServices();
+//  initMapServices();
   updateStatus("Idle");
   updateControls();
   loadTripHistory();
