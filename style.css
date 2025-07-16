@@ -166,6 +166,34 @@ button:hover:not(:disabled) {
   margin-bottom: 10px;
 }
 
+/* === Login Screen === */
+#login-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #0078D4, #00B4FF);
+  color: white;
+  text-align: center;
+}
+
+.login-wrapper {
+  max-width: 300px;
+  padding: 20px;
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+}
+
+.app-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
 /* === Responsive === */
 @media (max-width: 600px) {
   .button-group {
