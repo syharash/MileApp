@@ -1,4 +1,4 @@
-// map.js
+// log.js
 
 let map;
 let directionsService;
