@@ -4,10 +4,10 @@ window.onload = function () {
   updateControls();
   loadTripHistory();
 
-  const rateInput = document.getElementById("rate");
-  if (rateInput) {
-    rateInput.value = "0.655";
-  }
+  //const rateInput = document.getElementById("rate");
+  //if (rateInput) {
+  //  rateInput.value = "0.655";
+  //}
   
     const buttonHandlers = {
     startTrackingBtn: startTracking,
