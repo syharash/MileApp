@@ -68,17 +68,23 @@ function updateSummary() {
 }
 
 // === CSV Export ===
-function downloadCSV() {
-  if (!filteredLog.length) return showToast("📂 No trips to export");
+function downloadCSV(useFiltered = false) {
+  const source = useFiltered ? filteredLog : tripLog;
+  if (!source.length) {
+    showToast("📂 No trips to export");
+    return;
+  }
+
   let csv = "Date,Purpose,Notes,Miles,Duration,Paused,Reimbursement\n";
-  filteredLog.forEach(t => {
+  source.forEach(t => {
     csv += `${t.date},${t.purpose},${t.notes},${t.miles},${t.duration},${t.paused},${t.reimbursement}\n`;
   });
+
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "filtered_mileage_log.csv";
+  a.download = useFiltered ? "filtered_mileage_log.csv" : "mileage_log.csv";
   a.click();
   URL.revokeObjectURL(url);
 }
