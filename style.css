@@ -377,14 +377,77 @@ button:focus-visible {
   }
 }
                              
-/* === Responsive === */
-@media (max-width: 600px) {
+/* === Responsive Layout for Mobile === */
+@media (max-width: 800px) {
+  /* Layout stacks vertically */
+  .split-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Sidebar stretches full width */
+  .sidebar {
+    width: 100%;
+    max-height: none;
+    padding: 16px;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  /* Map panel adjusts height */
+  .map-panel {
+    min-height: 300px;
+  }
+
+  /* Buttons stack vertically */
   .button-group {
     flex-direction: column;
   }
 
-  button {
+  .button-group button {
     width: 100%;
+  }
+
+  /* Floating timer repositioned */
+  #trip-timer {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    font-size: 0.85em;
+    padding: 6px 10px;
+    z-index: 1000;
+  }
+
+  /* Sticky status bar simplified */
+  #status-bar {
+    font-size: 0.95em;
+    padding: 8px 16px;
+  }
+
+  /* Directions panel readability */
+  #directions-panel {
+    font-size: 0.9em;
+    padding: 8px;
+  }
+
+  /* Login screen adjustments */
+  .login-wrapper {
+    padding: 16px;
+  }
+
+  .app-title {
+    font-size: 1.5em;
+  }
+
+  .logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  /* Toast visibility */
+  #toast {
+    font-size: 0.9em;
+    padding: 10px 16px;
   }
 }
 
