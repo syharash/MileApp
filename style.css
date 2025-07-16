@@ -92,6 +92,21 @@ button:hover:not(:disabled) {
   font-size: 0.95em;
 }
 
+/* === Floating Trip Timer === */
+#trip-timer {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #0078D4;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.95em;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  display: none;
+}
 /* === Map & Directions === */
 #map {
   height: 300px;
