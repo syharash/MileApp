@@ -156,12 +156,11 @@ button:hover:not(:disabled) {
 }
 
 /* === Responsive === */
-@media (max-width: 600px) {
+@media (forced-colors: active) {
   .button-group {
     flex-direction: column;
   }
-
+}
   button {
     width: 100%;
   }
-}
