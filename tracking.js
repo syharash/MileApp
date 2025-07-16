@@ -6,8 +6,13 @@ let tripEnd = null;
 let pauseStartTime = null;
 let totalPauseDuration = 0;
 
+function updateStatusBar(status) {
+  document.getElementById("status-text").textContent = status;
+}
+
 function startTracking() {
-   tripStartTime = Date.now();
+  updateStatusBar("Tracking");
+  tripStartTime = Date.now();
   document.getElementById("trip-timer").style.display = "block";
   updateTripTimer();
   tripStatus = 'tracking';
@@ -27,6 +32,7 @@ function startTracking() {
 }
 
 function pauseTracking() {
+  updateStatusBar("Paused");
   tripStatus = 'paused';
   clearInterval(trackingInterval);
   trackingInterval = null;
@@ -37,6 +43,7 @@ function pauseTracking() {
 }
 
 function resumeTracking() {
+  updateStatusBar("Tracking"); 
   tripStatus = 'resumed';
   trackingInterval = setInterval(() => {
     // poll location again
@@ -51,6 +58,7 @@ function resumeTracking() {
 }
 
 async function endTracking() {
+  updateStatusBar("Idle"); 
   document.getElementById("trip-timer").style.display = "none";
   tripStatus = 'idle';
   navigator.geolocation.getCurrentPosition(async pos => {
