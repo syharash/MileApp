@@ -135,6 +135,12 @@ export async function endTracking() {
     updateStatus("Trip Complete");
     updateControls();
     updateDebugBadge();
+
+    clearDirections();
+    stopLiveTracking();
+    resetTripData();
+    clearTripUI();
+    
     tripData.start = tripData.end = null;
   }, () => {
     showToast("⚠️ GPS access failed", "error");
@@ -142,8 +148,4 @@ export async function endTracking() {
     updateDebugBadge();
   });
 }
-clearDirections();
-stopLiveTracking();
-resetTripData();
-clearTripUI();
 
