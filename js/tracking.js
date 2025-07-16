@@ -4,7 +4,7 @@ import { getRoute } from './js/map.js';
 import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './js/ui.js';
 import { logTrip } from './js/log.js';
 import { startLiveTracking } from './js/map.js';
-import { stopLiveTracking } from './js/map.js';
+import { stopLiveTracking, clearDirections } from './js/map.js';
 
 const tripData = {
   status: 'idle',
@@ -15,6 +15,16 @@ const tripData = {
   pausedDuration: 0,
   interval: null,
 };
+
+function resetTripData() {
+  tripData.status = 'idle';
+  tripData.tracking = false;
+  tripData.start = null;
+  tripData.end = null;
+  tripData.pauseStart = null;
+  tripData.pausedDuration = 0;
+  tripData.interval = null;
+}
 
 export function startTracking() {
   tripData.status = 'tracking';
@@ -131,3 +141,7 @@ export async function endTracking() {
     updateDebugBadge();
   });
 }
+clearDirections();
+stopLiveTracking();
+resetTripData();
+
