@@ -7,6 +7,9 @@ let pauseStartTime = null;
 let totalPauseDuration = 0;
 
 function startTracking() {
+   tripStartTime = Date.now();
+  document.getElementById("trip-timer").style.display = "block";
+  updateTripTimer();
   tripStatus = 'tracking';
   initMapServices();
   navigator.geolocation.getCurrentPosition(pos => {
@@ -48,6 +51,7 @@ function resumeTracking() {
 }
 
 async function endTracking() {
+  document.getElementById("trip-timer").style.display = "none";
   tripStatus = 'idle';
   navigator.geolocation.getCurrentPosition(async pos => {
     tripEnd = {
@@ -116,6 +120,18 @@ async function endTracking() {
     updateStatus("Trip Complete");
   });
 }
+
+function updateTripTimer() {
+  if (!tripStartTime) return;
+  const now = Date.now();
+  const elapsed = new Date(now - tripStartTime);
+  const hh = String(elapsed.getUTCHours()).padStart(2, "0");
+  const mm = String(elapsed.getUTCMinutes()).padStart(2, "0");
+  const ss = String(elapsed.getUTCSeconds()).padStart(2, "0");
+  document.getElementById("trip-timer").textContent = `Trip Time: ${hh}:${mm}:${ss}`;
+  setTimeout(updateTripTimer, 1000);
+}
+
 
 // === Restore Last Trip ===
 function restoreLastTrip() {
