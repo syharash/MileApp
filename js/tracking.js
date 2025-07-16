@@ -3,7 +3,8 @@ import { updateDebugBadge } from './js/ui.js';
 import { getRoute } from './js/map.js';
 import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './js/ui.js';
 import { logTrip } from './js/log.js';
-import { startLiveTracking } from './js/log.js'
+import { startLiveTracking } from './js/map.js';
+import { stopLiveTracking } from './js/map.js';
 
 const tripData = {
   status: 'idle',
@@ -80,6 +81,7 @@ export async function endTracking() {
     clearInterval(tripData.interval);
     tripData.interval = null;
     tripData.tracking = false;
+    stopLiveTracking();
 
     try {
       const { data, error } = await getRoute(tripData.start, tripData.end);
