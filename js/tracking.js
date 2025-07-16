@@ -44,6 +44,7 @@ export function startTracking() {
     showToast("🚀 Trip started!");
     updateControls();
     updateDebugBadge();
+    updateDebugPanel();
   }, () => showToast("⚠️ Unable to access GPS", "error"));
 }
 
@@ -56,6 +57,7 @@ export function pauseTracking() {
   showToast("⏸️ Trip paused");
   updateControls();
   updateDebugBadge();
+  updateDebugPanel();
 }
 
 export function resumeTracking() {
@@ -71,6 +73,7 @@ export function resumeTracking() {
   showToast("▶️ Trip resumed");
   updateControls();
   updateDebugBadge();
+  updateDebugPanel();
 }
 
 export async function endTracking() {
@@ -102,6 +105,7 @@ export async function endTracking() {
         updateStatus("Error");
         updateControls();
         updateDebugBadge();
+        updateDebugPanel();
         return;
       }
 
@@ -135,6 +139,7 @@ export async function endTracking() {
     updateStatus("Trip Complete");
     updateControls();
     updateDebugBadge();
+    updateDebugPanel();
 
     clearDirections();
     stopLiveTracking();
@@ -146,6 +151,7 @@ export async function endTracking() {
     showToast("⚠️ GPS access failed", "error");
     updateStatus("Trip Complete");
     updateDebugBadge();
+    updateDebugPanel();
   });
 }
 
