@@ -4,11 +4,11 @@ window.onload = function () {
   updateControls();
   loadTripHistory();
 
-  //const rateInput = document.getElementById("rate");
-  //if (rateInput) {
-  //  rateInput.value = "0.655";
-  //}
-  
+  if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js")
+    .then(() => console.log("✅ Service Worker registered"))
+    .catch(err => console.error("❌ Service Worker error:", err));
+}
     const buttonHandlers = {
     startTrackingBtn: startTracking,
     pauseTrackingBtn: pauseTracking,
