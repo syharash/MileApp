@@ -15,10 +15,11 @@ function logTrip(purpose, notes, distance, duration, paused) {
     reimbursement: `$${reimbursement}`
   };
   tripLog.push(entry);
+  filteredLog = [...tripLog]; // ✅ Sync filtered view
   saveTripHistory();
   syncToGoogleSheets(entry);
-  renderTripLog();
-  updateSummary();
+  renderTripLog();            // ✅ Update UI immediately
+  updateSummary();            // ✅ Refresh totals
 }
 
 // === Save & Load ===
@@ -69,7 +70,12 @@ function updateSummary() {
 
 // === CSV Export ===
 function downloadCSV(useFiltered = false) {
+  if (!useFiltered) {
+    filteredLog = [...tripLog]; // ✅ Ensure filteredLog is fresh if needed
+  }
+
   const source = useFiltered ? filteredLog : tripLog;
+
   if (!source.length) {
     showToast("📂 No trips to export");
     return;
