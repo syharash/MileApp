@@ -2,6 +2,8 @@
 
 // Load the main app logic
 import './js/main.js';
+import { initDebugCopy } from './js/ui.js';
+initDebugCopy();
 
 // Optional: register service worker for offline/PWA support
 if ('serviceWorker' in navigator) {
