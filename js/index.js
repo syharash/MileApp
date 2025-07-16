@@ -2,13 +2,13 @@
 
 // Load the main app logic
 import './main.js';
-import { initDebugCopy } from './js/ui.js';
+import { initDebugCopy } from './ui.js';
 initDebugCopy();
 
 // Optional: register service worker for offline/PWA support
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/js/sw.js').then(reg => {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
       console.log('✅ Service Worker registered:', reg.scope);
     }).catch(err => {
       console.warn('⚠️ Service Worker registration failed:', err);
