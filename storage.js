@@ -23,3 +23,4 @@ function logTrip(purpose, notes, distance, duration, paused) {
 
 function saveTripHistory() {
   const user = localStorage.getItem("userEmail") || "default";
+}
