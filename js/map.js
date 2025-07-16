@@ -1,10 +1,4 @@
-// map.js
-let gpsPath = [];
-let livePolyLine = null;
-let watchId = null;
-let map;
-let directionsService;
-let directionsRenderer;
+let map, directionsService, directionsRenderer;
 
 function initMapServices() {
   if (map) return;
@@ -19,120 +13,55 @@ function initMapServices() {
   });
 }
 
-async function getRoute(start, end) {
-  if (!start || !end) {
-    console.warn("Missing start or end location:", { start, end });
-    return { error: "Missing location data." };
-  }
-
-  const coordsValid =
-    typeof start.latitude === "number" &&
-    typeof start.longitude === "number" &&
-    typeof end.latitude === "number" &&
-    typeof end.longitude === "number";
-
-  if (!coordsValid) {
-    console.warn("Invalid coordinates:", { start, end });
-    return { error: "Invalid coordinates." };
-  }
-
-  try {
-    const result = await new Promise((resolve, reject) => {
-      directionsService.route(
-        {
-          origin: new google.maps.LatLng(start.latitude, start.longitude),
-          destination: new google.maps.LatLng(end.latitude, end.longitude),
-          travelMode: google.maps.TravelMode.DRIVING
-        },
-        (response, status) => {
-          status === google.maps.DirectionsStatus.OK
-            ? resolve(response)
-            : reject(`Route request failed: ${status}`);
-        }
-      );
+function getRoute(start, end) {
+  return new Promise((resolve, reject) => {
+    directionsService.route({
+      origin: new google.maps.LatLng(start.latitude, start.longitude),
+      destination: new google.maps.LatLng(end.latitude, end.longitude),
+      travelMode: google.maps.TravelMode.DRIVING
+    }, (response, status) => {
+      status === google.maps.DirectionsStatus.OK
+        ? resolve(response)
+        : reject(`Route request failed: ${status}`);
     });
-    return { data: result };
-  } catch (error) {
-    console.error("Route calculation error:", error);
-    return { error: "Unable to calculate route. Try again later." };
-  }
+  });
 }
 
 function renderSteps(steps) {
   const panel = document.getElementById("directions-panel");
   panel.innerHTML = "";
-  const iconMap = {
-    "turn-left": "⬅️",
-    "turn-right": "➡️",
-    "merge": "🔀",
-    "ramp-right": "↪️",
-    "ramp-left": "↩️"
-  };
+
   steps.forEach(step => {
-    const div = document.createElement("div");
-    const icon = iconMap[step.maneuver] || "➡️";
-    div.innerHTML = `${icon} ${step.html_instructions}`;
-    panel.appendChild(div);
+    const li = document.createElement("li");
+    const instruction = stripHTML(step.instructions || "Continue");
+    const distance = step.distance?.text || "";
+    const duration = step.duration?.text || "";
+    li.textContent = `${instruction} (${distance}, ${duration})`;
+    li.prepend(getIconForManeuver(step.maneuver || "default"));
+    panel.appendChild(li);
   });
 }
 
-function clearDirections() {
-  if (directionsRenderer) directionsRenderer.setDirections({ routes: [] });
-  const panel = document.getElementById("directions-panel");
-  if (panel) panel.innerHTML = "";
+function getIconForManeuver(type) {
+  const iconMap = {
+    "turn-left": "⬅️", "turn-right": "➡️", "merge": "🔀",
+    "ramp-left": "↖️", "ramp-right": "↘️", "roundabout-left": "⏪",
+    "roundabout-right": "⏩", "straight": "⬆️", "uturn-left": "↩️",
+    "uturn-right": "↪️", "fork-left": "🡸", "fork-right": "🡺",
+    "default": "➡️"
+  };
+  return makeIcon(iconMap[type] || iconMap["default"]);
 }
 
-function getMapSnapshot() {
-  return map
-    ? {
-        center: map.getCenter().toJSON(),
-        zoom: map.getZoom()
-      }
-    : null;
+function makeIcon(symbol) {
+  const span = document.createElement("span");
+  span.textContent = symbol + " ";
+  span.style.marginRight = "6px";
+  return span;
 }
 
-export {
-  initMapServices,
-  getRoute,
-  renderSteps,
-  clearDirections,
-  getMapSnapshot
-};
-
-export function startLiveTracking() {
-  gpsPath = []; // reset path
-  livePolyline = new google.maps.Polyline({
-    path: gpsPath,
-    geodesic: true,
-    strokeColor: "#00b3b3",
-    strokeOpacity: 0.6,
-    strokeWeight: 5,
-    map
-  });
-
-  watchId = navigator.geolocation.watchPosition(pos => {
-    const point = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-    gpsPath.push(point);
-    livePolyline.setPath(gpsPath);
-  }, err => {
-    console.warn("Live GPS error:", err);
-  }, {
-    enableHighAccuracy: true,
-    maximumAge: 5000,
-    timeout: 10000
-  });
+function stripHTML(html) {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  return temp.textContent || temp.innerText || "";
 }
-
-export function stopLiveTracking() {
-  if (watchId !== null) {
-    navigator.geolocation.clearWatch(watchId);
-    watchId = null;
-  }
-  if (livePolyline) {
-    livePolyline.setMap(null);
-    livePolyline = null;
-  }
-  gpsPath = [];
-}
-
-

@@ -1,157 +1,118 @@
-// tracking.js
-import { updateDebugBadge } from './ui.js';
-import { getRoute } from './map.js';
-import { renderSteps, safeUpdate, showToast, updateStatus, updateControls } from './ui.js';
-// import { logTrip } from './log.js';
-import { startLiveTracking } from './map.js';
-import { stopLiveTracking, clearDirections } from './map.js';
-import { clearTripUI } from './ui.js';
+let tracking = false;
+let tripStatus = 'idle';
+let trackingInterval = null;
+let tripStart = null;
+let tripEnd = null;
+let pauseStartTime = null;
+let totalPauseDuration = 0;
 
-const tripData = {
-  status: 'idle',
-  tracking: false,
-  start: null,
-  end: null,
-  pauseStart: null,
-  pausedDuration: 0,
-  interval: null,
-};
-
-function resetTripData() {
-  tripData.status = 'idle';
-  tripData.tracking = false;
-  tripData.start = null;
-  tripData.end = null;
-  tripData.pauseStart = null;
-  tripData.pausedDuration = 0;
-  tripData.interval = null;
-}
-
-export function startTracking() {
-  tripData.status = 'tracking';
+function startTracking() {
+  tripStatus = 'tracking';
+  initMapServices();
   navigator.geolocation.getCurrentPosition(pos => {
-    tripData.start = {
+    tripStart = {
       latitude: pos.coords.latitude,
       longitude: pos.coords.longitude,
       timestamp: Date.now()
     };
-    console.log("📍 Trip Start:", tripData.start.latitude, tripData.start.longitude);
-
-    tripData.tracking = true;
-    startLiveTracking();
-    tripData.pausedDuration = 0;
+    tracking = true;
+    totalPauseDuration = 0;
     updateStatus("Tracking");
     showToast("🚀 Trip started!");
     updateControls();
-    updateDebugBadge();
-    updateDebugPanel();
   }, () => showToast("⚠️ Unable to access GPS", "error"));
 }
 
-export function pauseTracking() {
-  tripData.status = 'paused';
-  clearInterval(tripData.interval);
-  tripData.interval = null;
-  tripData.pauseStart = Date.now();
+function pauseTracking() {
+  tripStatus = 'paused';
+  clearInterval(trackingInterval);
+  trackingInterval = null;
+  pauseStartTime = Date.now();
   updateStatus("Paused");
   showToast("⏸️ Trip paused");
   updateControls();
-  updateDebugBadge();
-  updateDebugPanel();
 }
 
-export function resumeTracking() {
-  tripData.status = 'resumed';
-  tripData.interval = setInterval(() => {
-    // optional fallback location polling
+function resumeTracking() {
+  tripStatus = 'resumed';
+  trackingInterval = setInterval(() => {
+    // poll location again
   }, 10000);
-  if (tripData.pauseStart) {
-    tripData.pausedDuration += Date.now() - tripData.pauseStart;
-    tripData.pauseStart = null;
+  if (pauseStartTime) {
+    totalPauseDuration += Date.now() - pauseStartTime;
+    pauseStartTime = null;
   }
   updateStatus("Tracking");
   showToast("▶️ Trip resumed");
   updateControls();
-  updateDebugBadge();
-  updateDebugPanel();
 }
 
-export async function endTracking() {
-  tripData.status = 'idle';
+async function endTracking() {
+  tripStatus = 'idle';
   navigator.geolocation.getCurrentPosition(async pos => {
-    tripData.end = {
+    tripEnd = {
       latitude: pos.coords.latitude,
       longitude: pos.coords.longitude,
       timestamp: Date.now()
     };
-    console.log("📍 Trip End:", tripData.end.latitude, tripData.end.longitude);
 
-    if (!tripData.start || !tripData.end) {
-      showToast("❌ Trip cannot be ended: Missing location data.", "error");
-      console.warn("Missing tripStart or tripEnd");
+    if (!tripStart || !tripEnd) {
+      alert("Trip cannot be ended: Missing location data.");
       return;
     }
 
-    clearInterval(tripData.interval);
-    tripData.interval = null;
-    tripData.tracking = false;
-    stopLiveTracking();
+    clearInterval(trackingInterval);
+    trackingInterval = null;
+    tracking = false;
 
     try {
-      const { data, error } = await getRoute(tripData.start, tripData.end);
+      const result = await getRoute(tripStart, tripEnd);
+      if (result) {
+        const leg = result.routes[0].legs[0];
+        directionsRenderer.setDirections(result);
+        localStorage.setItem("lastRoute", JSON.stringify(result));
 
-      if (error) {
-        showToast(`⚠️ ${error}`, "error");
-        updateStatus("Error");
-        updateControls();
-        updateDebugBadge();
-        updateDebugPanel();
-        return;
+        const distanceMi = (leg.distance.value / 1609.34).toFixed(2);
+        const durationMin = Math.round(leg.duration.value / 60);
+        const pausedMin = Math.round(totalPauseDuration / 60000);
+        const startAddress = leg.start_address;
+        const endAddress = leg.end_address;
+        const purpose = document.getElementById("trip-purpose").value || "–";
+        const notes = document.getElementById("trip-notes").value || "–";
+
+        safeUpdate("summary-purpose", purpose);
+        safeUpdate("summary-notes", notes);
+        safeUpdate("summary-start", startAddress);
+        safeUpdate("summary-end", endAddress);
+        safeUpdate("summary-distance", `${distanceMi} mi`);
+        safeUpdate("summary-duration", `${durationMin} min`);
+        safeUpdate("pause-summary", `${pausedMin} min`);
+        safeUpdate("lastDistance", `${distanceMi} mi`);
+        safeUpdate("lastDuration", `${durationMin} min`);
+
+        renderSteps(leg.steps);
+        logTrip(purpose, notes, distanceMi, durationMin, pausedMin);
+        showToast(`✅ Trip complete: ${distanceMi} mi`);
       }
-
-      const leg = data.routes[0].legs[0];
-      const distanceMi = (leg.distance.value / 1609.34).toFixed(2);
-      const durationMin = Math.round(leg.duration.value / 60);
-      const pausedMin = Math.round(tripData.pausedDuration / 60000);
-      const startAddress = leg.start_address;
-      const endAddress = leg.end_address;
-      const purpose = document.getElementById("trip-purpose").value || "–";
-      const notes = document.getElementById("trip-notes").value || "–";
-
-      safeUpdate("summary-purpose", purpose);
-      safeUpdate("summary-notes", notes);
-      safeUpdate("summary-start", startAddress);
-      safeUpdate("summary-end", endAddress);
-      safeUpdate("summary-distance", `${distanceMi} mi`);
-      safeUpdate("summary-duration", `${durationMin} min`);
-      safeUpdate("pause-summary", `${pausedMin} min`);
-      safeUpdate("lastDistance", `${distanceMi} mi`);
-      safeUpdate("lastDuration", `${durationMin} min`);
-
-      renderSteps(leg.steps);
-      logTrip(purpose, notes, distanceMi, durationMin, pausedMin);
-      showToast(`✅ Trip complete: ${distanceMi} mi`);
     } catch (err) {
       console.error("endTracking() error:", err);
-      showToast("❌ " + err.message, "error");
+      const cached = localStorage.getItem("lastRoute");
+      if (cached) {
+        const result = JSON.parse(cached);
+        const leg = result.routes[0].legs[0];
+        directionsRenderer.setDirections(result);
+        renderSteps(leg.steps);
+        showToast("⚠️ Offline: showing last saved route");
+      } else {
+        showToast("❌ " + err.message, "error");
+      }
     }
 
     updateStatus("Trip Complete");
     updateControls();
-    updateDebugBadge();
-    updateDebugPanel();
-
-    clearDirections();
-    stopLiveTracking();
-    resetTripData();
-    clearTripUI();
-    
-    tripData.start = tripData.end = null;
+    tripStart = tripEnd = null;
   }, () => {
     showToast("⚠️ GPS access failed", "error");
     updateStatus("Trip Complete");
-    updateDebugBadge();
-    updateDebugPanel();
   });
 }
-

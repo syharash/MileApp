@@ -1,29 +1,9 @@
-// main.js
-
-import { toggleDebug, syncDebugUI } from './debug.js';
-import {
-  startTracking,
-  pauseTracking,
-  resumeTracking,
-  endTracking
-} from './tracking.js';
-import { downloadCSV, clearHistory } from './log.js';
-import { toggleHelp, updateStatus, updateControls, showToast } from './ui.js';
-import { initMapServices, clearDirections } from './map.js';
-
-// Optional: preload interface
-window.onload = () => {
-  // Sync debug mode from localStorage
-  syncDebugUI();
-
-  // Initialize map services and UI state
+window.onload = function () {
   initMapServices();
-  clearDirections();
   updateStatus("Idle");
   updateControls();
-  showToast("🧭 Mileage Tracker Ready");
+  loadTripHistory();
 
-  // Button binding map
   const buttonHandlers = {
     startTrackingBtn: startTracking,
     pauseTrackingBtn: pauseTracking,
@@ -32,26 +12,26 @@ window.onload = () => {
     downloadCSVBtn: downloadCSV,
     clearHistoryBtn: clearHistory,
     toggleHelpBtn: toggleHelp,
-    enableDebugBtn: () => {
-      const active = localStorage.getItem("debugMode") === "true";
-      toggleDebug(!active);
-    }
+    restoreTrip: restoreLastTrip,
+    logoutBtn: logoutUser
   };
 
   for (const [id, handler] of Object.entries(buttonHandlers)) {
     const el = document.getElementById(id);
     if (el) el.onclick = handler;
-    else console.warn(`🔍 Button not found: ${id}`);
+    else console.warn(`🔍 Missing button with ID: ${id}`);
   }
 
-  // Reset fields on load
-  const purposeField = document.getElementById("trip-purpose");
-  const notesField = document.getElementById("trip-notes");
-  if (purposeField) purposeField.value = "";
-  if (notesField) notesField.value = "";
+  document.getElementById("trip-purpose").value = "";
+  document.getElementById("trip-notes").value = "";
 
-  // Toast existence check
   if (!document.getElementById("toast")) {
-    console.warn("🚨 Toast element missing");
+    console.warn("🚨 Toast element not found.");
+  }
+
+  if (directionsRenderer) {
+    directionsRenderer.setDirections({ routes: [] });
+    const panel = document.getElementById("directions-panel");
+    if (panel) panel.innerHTML = "";
   }
 };
