@@ -8,6 +8,7 @@ function handleLogin(response) {
   document.getElementById("login-screen").style.display = "none";
   document.querySelector(".container").style.display = "block";
   loadTripHistory();
+  showToast("✅ Signed in successfully");
 }
 
 function logoutUser() {
