@@ -1,5 +1,5 @@
 // ui.js
-import { getTripState } from '/tracking.js';
+import { getTripState } from './tracking.js';
 
 function updateStatus(state) {
   const el = document.getElementById("tracking-status");
