@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="./favicon.ico" type="image/x-icon" />
 
+  <!-- Google Maps API -->
+  <script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAInvy6GdRdnuYVJGlde1gX0VINpU5AsJI&libraries=places&callback=initMapServices">
+  </script>
+  
   <!-- Google Identity -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
@@ -118,13 +125,6 @@
     <!-- Toast -->
     <div id="toast"></div>
   </div> <!-- End of .container -->
-
- <!-- Google Maps API -->
-  <script
-    async
-    defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAInvy6GdRdnuYVJGlde1gX0VINpU5AsJI&libraries=places&callback=initMapServices">
-  </script>
 
   <!-- Scripts -->
   <script src="auth.js"></script>
