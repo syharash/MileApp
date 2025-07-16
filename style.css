@@ -176,3 +176,49 @@ button:hover:not(:disabled) {
     width: 100%;
   }
 }
+
+/* === High Contrast Mode (Modern) === */
+@media (forced-colors: active) {
+  body, .container {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  input, textarea, select {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+
+  button {
+    background: Canvas;
+    color: CanvasText;
+    border: 2px solid CanvasText;
+  }
+
+  #map, #directions-panel, #help-screen, #trip-log li {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+
+  #toast {
+    background: CanvasText;
+    color: Canvas;
+    border: 1px solid Canvas;
+  }
+
+  #userBadge {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+
+  h2, h3, h4 {
+    color: CanvasText;
+  }
+
+  a {
+    color: LinkText;
+  }
+}
