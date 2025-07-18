@@ -7,6 +7,7 @@ let pauseStartTime = null;
 let totalPauseDuration = 0;
 
 window.MileApp = {
+  
 function updateStatusBar(status) {
   document.getElementById("status-text").textContent = status;
 },
