@@ -8,10 +8,10 @@ const urlsToCache = [
   "/tracking.js",
   "/storage.js",
   "/ui.js",
-  "/main.js",
   "/manifest.json",
   "/icon-192.png",
-  "/icon-512.png"
+  "/icon-512.png",
+  "/main.js"
 ];
 
 // ✅ Install: Cache fresh files
