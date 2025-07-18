@@ -2,7 +2,7 @@ window.onload = function () {
    if (!window.MileApp) {
     console.error("🚫 MileApp not available — tracking functions can't be bound yet.");
     return;
-  initMapServices();
+  // initMapServices();
   updateStatus("Idle");
   updateControls();
   loadTripHistory();
