@@ -12,13 +12,13 @@
   "id": "https://syharash.github.io/MileApp/",
   "icons": [
    {
-      "src": "car-512x512.png",
+      "src": "bluecar-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "bluecar-512x512.png",
+      "src": "car-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
