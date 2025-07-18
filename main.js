@@ -10,14 +10,14 @@ window.onload = function () {
     .catch(err => console.error("❌ Service Worker error:", err));
 }
     const buttonHandlers = {
-    startTrackingBtn: startTracking,
-    pauseTrackingBtn: pauseTracking,
-    resumeTrackingBtn: resumeTracking,
-    endTrackingBtn: endTracking,
-    downloadCSVBtn: downloadCSV,
-    clearHistoryBtn: clearHistory,
-    toggleHelpBtn: toggleHelp,
-    restoreTrip: restoreLastTrip,
+    startTrackingBtn: MileApp.startTracking,
+    pauseTrackingBtn: MileApp.pauseTracking,
+    resumeTrackingBtn: MileApp.resumeTracking,
+    endTrackingBtn: MileApp.endTracking,
+    downloadCSVBtn: MileApp.downloadCSV,
+    clearHistoryBtn: MileApp.clearHistory,
+    toggleHelpBtn: MileApp.toggleHelp,
+    restoreTrip: MileApp.restoreLastTrip,
     logoutBtn: logoutUser
   };
 
@@ -43,10 +43,10 @@ window.onload = function () {
 
 function handleMenuAction(action) {
   switch (action) {
-    case "start": startTracking(); break;
-    case "pause": pauseTracking(); break;
-    case "resume": resumeTracking(); break;
-    case "end": endTracking(); break;
-    case "download": downloadCSV(false); break;
+    case "start": MileApp.startTracking(); break;
+    case "pause": MileApp.pauseTracking(); break;
+    case "resume": MileApp.resumeTracking(); break;
+    case "end": MileApp.endTracking(); break;
+    case "download": MileApp.downloadCSV(false); break;
   }
 }
