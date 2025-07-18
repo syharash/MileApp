@@ -1,0 +1,45 @@
+/* === Mobile-Specific UI Fixes === */
+@media (max-width: 1200px) {
+  body {
+    font-size: 16px;
+  }
+
+  .split-layout {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .map-panel {
+    width: 100%;
+    padding: 0;
+    order: 1;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 16px;
+    order: 2;
+    overflow-y: auto;
+  }
+
+  #map {
+    width: 100vw;
+    height: calc(100vh - 280px); /* Adjust for header, controls, etc. */
+    max-height: 500px;
+    background-color: #eef;
+  }
+
+  button,
+  input,
+  textarea {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  #trip-timer,
+  #status-bar {
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+  }
+}
