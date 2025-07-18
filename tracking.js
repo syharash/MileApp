@@ -89,11 +89,11 @@ async function endTracking() {
        let rate = 0;
        const rateInput = document.getElementById("rate");
        
-        if (rateInput) {
-          rate = parseFloat(rateInput.value || "0");
-                      } else {
-                                console.warn("Missing #rate input field during endTracking()");
-                             }  
+      //  if (rateInput) {
+      //    rate = parseFloat(rateInput.value || "0");
+      //                } else {
+      //                          console.warn("Missing #rate input field during endTracking()");
+      //                       }  
 
         const rate = parseFloat(document.getElementById("rate").value || "0");
         const reimbursement = (distanceMi * rate).toFixed(2);
