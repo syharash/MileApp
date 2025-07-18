@@ -51,7 +51,7 @@ function handleMenuAction(action) {
     case "pause": MileApp.pauseTracking(); break;
     case "resume": MileApp.resumeTracking(); break;
     case "end": MileApp.endTracking(); break;
-    case "download": MileApp.downloadCSV(false); break;
+    case "download": downloadCSV(false); break;
     default: console.warn(`⚠️ Unknown menu action: ${action}`);
   }
 }
