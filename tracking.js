@@ -6,9 +6,10 @@ let tripEnd = null;
 let pauseStartTime = null;
 let totalPauseDuration = 0;
 
+window.MileApp = {
 function updateStatusBar(status) {
   document.getElementById("status-text").textContent = status;
-}
+},
 
 function startTracking() {
   updateStatusBar("Tracking");
@@ -29,7 +30,7 @@ function startTracking() {
     showToast("🚀 Trip started!");
     updateControls();
   }, () => showToast("⚠️ Unable to access GPS", "error"));
-}
+},
 
 function pauseTracking() {
   updateStatusBar("Paused");
@@ -40,7 +41,7 @@ function pauseTracking() {
   updateStatus("Paused");
   showToast("⏸️ Trip paused");
   updateControls();
-}
+},
 
 function resumeTracking() {
   updateStatusBar("Tracking"); 
@@ -55,7 +56,7 @@ function resumeTracking() {
   updateStatus("Tracking");
   showToast("▶️ Trip resumed");
   updateControls();
-}
+},
 
 async function endTracking() {
   updateStatusBar("Idle"); 
@@ -140,7 +141,7 @@ async function endTracking() {
     showToast("⚠️ GPS access failed", "error");
     updateStatus("Trip Complete");
   });
-}
+},
 
 function updateTripTimer() {
   if (!tripStartTime) return;
@@ -151,7 +152,7 @@ function updateTripTimer() {
   const ss = String(elapsed.getUTCSeconds()).padStart(2, "0");
   document.getElementById("trip-timer").textContent = `Trip Time: ${hh}:${mm}:${ss}`;
   setTimeout(updateTripTimer, 1000);
-}
+},
 
 
 // === Restore Last Trip ===
@@ -183,5 +184,5 @@ function restoreLastTrip() {
   });
 
   showToast("🔄 Last trip restored");
+                        },
 }
-
