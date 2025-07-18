@@ -14,7 +14,7 @@ startTracking() {
   MileApp.updateStatusBar("Tracking");
   tripStartTime = Date.now();
   document.getElementById("trip-timer").style.display = "block";
-  updateTripTimer();
+  MileApp.updateTripTimer();
   window.tripStatus = 'tracking';
   initMapServices();
   navigator.geolocation.getCurrentPosition(pos => {
