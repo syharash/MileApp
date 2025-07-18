@@ -1,0 +1,114 @@
+/* === Core Resets === */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+  background-color: #f8f9fa;
+  color: #222;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* === App Container === */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* === Map View === */
+#map {
+  flex: 1;
+  width: 100%;
+  min-height: 40vh;
+  border: none;
+}
+
+/* === Trip Timer / Status === */
+#trip-timer,
+#trip-status-label {
+  font-size: 18px;
+  text-align: center;
+  padding: 8px;
+  background-color: #eef;
+  border-bottom: 1px solid #ccc;
+}
+
+/* === Controls Section === */
+.controls {
+  padding: 12px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* === Buttons === */
+button {
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #00BFFF;
+  color: #fff;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #009ad8;
+}
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* === Summary Section === */
+.summary {
+  padding: 12px;
+  background-color: #fff;
+  font-size: 15px;
+  border-top: 1px solid #ddd;
+}
+
+/* === Flash Feedback === */
+.flash {
+  animation: flashUpdate 0.8s ease-in-out;
+}
+@keyframes flashUpdate {
+  0% { background-color: #ffffcc; }
+  100% { background-color: transparent; }
+}
+
+/* === Toast Messages === */
+.toast {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  opacity: 0.95;
+  z-index: 9999;
+}
+.toast-success { background-color: #2ecc71; }
+.toast-error   { background-color: #e74c3c; }
+.toast-info    { background-color: #3498db; }
+
+/* === Responsive Adjustments === */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+  button {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
