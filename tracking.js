@@ -86,6 +86,9 @@ async function endTracking() {
 
         const distanceMi = (leg.distance.value / 1609.34).toFixed(2);
         const durationMin = Math.round(leg.duration.value / 60);
+        const rate = parseFloat(document.getElementById("rate").value || "0");
+        const reimbursement = (distanceMi * rate).toFixed(2);
+
         const pausedMin = Math.round(totalPauseDuration / 60000);
         const startAddress = leg.start_address;
         const endAddress = leg.end_address;
@@ -98,12 +101,13 @@ async function endTracking() {
         safeUpdate("summary-end", endAddress);
         safeUpdate("summary-distance", `${distanceMi} mi`);
         safeUpdate("summary-duration", `${durationMin} min`);
+        safeUpdate("summary-amount", `$${reimbursement}`);
         safeUpdate("pause-summary", `${pausedMin} min`);
         safeUpdate("lastDistance", `${distanceMi} mi`);
         safeUpdate("lastDuration", `${durationMin} min`);
 
         renderSteps(leg.steps);
-        logTrip(purpose, notes, distanceMi, durationMin, pausedMin);
+        logTrip(purpose, notes, distanceMi, durationMin, pausedMin, reimbursement);
         showToast(`✅ Trip complete: ${distanceMi} mi`);
       }
     } catch (err) {
