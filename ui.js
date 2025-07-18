@@ -20,22 +20,22 @@ function updateControls() {
   const resumeTrackingBtn = document.getElementById("resumeTrackingBtn");
   const endTrackingBtn = document.getElementById("endTrackingBtn");
 
-  if (tripStatus === 'idle') {
+  if (window.tripStatus === 'idle') {
     startTrackingBtn.disabled = false;
     pauseTrackingBtn.disabled = true;
     resumeTrackingBtn.disabled = true;
     endTrackingBtn.disabled = true;
-  } else if (tripStatus === 'tracking') {
+  } else if (window.tripStatus === 'tracking') {
     startTrackingBtn.disabled = true;
     pauseTrackingBtn.disabled = false;
     resumeTrackingBtn.disabled = true;
     endTrackingBtn.disabled = false;
-  } else if (tripStatus === 'paused') {
+  } else if (window.tripStatus === 'paused') {
     startTrackingBtn.disabled = true;
     pauseTrackingBtn.disabled = true;
     resumeTrackingBtn.disabled = false;
     endTrackingBtn.disabled = true;
-  } else if (tripStatus === 'resumed') {
+  } else if (window.tripStatus === 'resumed') {
     startTrackingBtn.disabled = true;
     pauseTrackingBtn.disabled = false;
     resumeTrackingBtn.disabled = true;
