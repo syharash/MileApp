@@ -18,7 +18,7 @@ window.onload = function () {
     pauseTrackingBtn: MileApp.pauseTracking,
     resumeTrackingBtn: MileApp.resumeTracking,
     endTrackingBtn: MileApp.endTracking,
-    downloadCSVBtn: MileApp.downloadCSV,
+    downloadCSVBtn: downloadCSV,
     clearHistoryBtn: MileApp.clearHistory,
     toggleHelpBtn: MileApp.toggleHelp,
     restoreTrip: MileApp.restoreLastTrip,
