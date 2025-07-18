@@ -1,5 +1,5 @@
 let tracking = false;
-let window.tripStatus = 'idle';
+window.tripStatus = 'idle';
 let trackingInterval = null;
 let tripStart = null;
 let tripEnd = null;
@@ -8,11 +8,11 @@ let totalPauseDuration = 0;
 
 window.MileApp = {
   
-function updateStatusBar(status) {
+ updateStatusBar(status) {
   document.getElementById("status-text").textContent = status;
 },
 
-function startTracking() {
+ startTracking() {
   updateStatusBar("Tracking");
   tripStartTime = Date.now();
   document.getElementById("trip-timer").style.display = "block";
@@ -33,7 +33,7 @@ function startTracking() {
   }, () => showToast("⚠️ Unable to access GPS", "error"));
 },
 
-function pauseTracking() {
+ pauseTracking() {
   updateStatusBar("Paused");
   window.tripStatus = 'paused';
   clearInterval(trackingInterval);
@@ -44,7 +44,7 @@ function pauseTracking() {
   updateControls();
 },
 
-function resumeTracking() {
+ resumeTracking() {
   updateStatusBar("Tracking"); 
   window.tripStatus = 'resumed';
   trackingInterval = setInterval(() => {
@@ -59,7 +59,7 @@ function resumeTracking() {
   updateControls();
 },
 
-async function endTracking() {
+endTracking: async function () {
   updateStatusBar("Idle"); 
   document.getElementById("trip-timer").style.display = "none";
   window.tripStatus = 'idle';
@@ -144,7 +144,7 @@ async function endTracking() {
   });
 },
 
-function updateTripTimer() {
+updateTripTimer() {
   if (!tripStartTime) return;
   const now = Date.now();
   const elapsed = new Date(now - tripStartTime);
@@ -157,7 +157,7 @@ function updateTripTimer() {
 
 
 // === Restore Last Trip ===
-function restoreLastTrip() {
+restoreLastTrip() {
   const cached = localStorage.getItem("lastRoute");
   if (!cached) {
     showToast("🕵️ No saved trip to restore");
