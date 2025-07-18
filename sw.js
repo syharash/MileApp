@@ -8,11 +8,11 @@ const urlsToCache = [
   "/tracking.js",
   "/storage.js",
   "/ui.js",
+  "/main.js",
   "/manifest.json",
   "/icon-192.png",
-  "/icon-512.png",
-  "/main.js"
-];
+  "/icon-512.png"
+  ];
 
 // ✅ Install: Cache fresh files
 self.addEventListener("install", event => {
