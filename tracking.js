@@ -86,6 +86,15 @@ async function endTracking() {
 
         const distanceMi = (leg.distance.value / 1609.34).toFixed(2);
         const durationMin = Math.round(leg.duration.value / 60);
+       let rate = 0;
+       const rateInput = document.getElementById("rate");
+       
+        if (rateInput) {
+          rate = parseFloat(rateInput.value || "0");
+                      } else {
+                                console.warn("Missing #rate input field during endTracking()");
+                             }  
+
         const rate = parseFloat(document.getElementById("rate").value || "0");
         const reimbursement = (distanceMi * rate).toFixed(2);
 
