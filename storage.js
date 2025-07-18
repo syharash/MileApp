@@ -78,7 +78,7 @@ function updateSummary() {
 // === CSV Export ===
 function downloadCSV(useFiltered = false) {
   if (!useFiltered) {
-    filteredLog = [...tripLog]; // ✅ Ensure filteredLog is fresh if needed
+    filteredLog = [...tripLog]; // ✅ Ensure filteredLog is fresh
   }
 
   const source = useFiltered ? filteredLog : tripLog;
@@ -88,24 +88,36 @@ function downloadCSV(useFiltered = false) {
     return;
   }
 
-  // === Generate Timestamp ===
-  const now = new Date();
-  const pad = n => n.toString().padStart(2, "0");
-  const timestamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  // === Generate Metadata ===
+  const username = "Syed"; // or retrieve dynamically
+  const tripId = source.length; // assuming each row = 1 trip
+  const timestamp = new Date().toISOString().slice(0,19).replace(/[:T]/g, "_");
 
-  // === Build CSV ===
-  let csv = "Date,Purpose,Notes,Miles,Duration,Paused,Reimbursement\n";
-  source.forEach(t => {
-    csv += `${t.date},${t.purpose},${t.notes},${t.miles},${t.duration},${t.paused},${t.reimbursement}\n`;
-  });
+  // === Build CSV Content ===
+  const escapeCSV = val => `"${String(val).replace(/"/g, '""')}"`;
 
+  const csvRows = source.map(t => [
+    escapeCSV(t.date),
+    escapeCSV(t.purpose),
+    escapeCSV(t.notes),
+    escapeCSV(t.miles),
+    escapeCSV(t.duration),
+    escapeCSV(t.paused),
+    escapeCSV(t.reimbursement)
+  ]);
+
+  const csv = [
+    ["Date", "Purpose", "Notes", "Miles", "Duration", "Paused", "Reimbursement"],
+    ...csvRows
+  ].map(row => row.join(",")).join("\n");
+
+  // === Create & Trigger Download ===
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
+
   a.href = url;
-  a.download = useFiltered
-    ? `filtered_mileage_log_${timestamp}.csv`
-    : `mileage_log_${timestamp}.csv`;
+  a.download = `${username}_${useFiltered ? "filtered_" : ""}trip_${tripId}_${timestamp}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
