@@ -24,8 +24,8 @@
 
   #map {
     width: 100vw;
-    height: calc(100vh - 280px); /* Adjust for header, controls, etc. */
-    max-height: 500px;
+    height: calc(100vh - 250px); /* Adjust for header, controls, etc. */
+    max-height: 400px;
     background-color: #eef;
   }
 
