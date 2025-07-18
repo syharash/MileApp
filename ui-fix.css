@@ -6,7 +6,7 @@
 
   .split-layout {
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
   }
 
   .map-panel {
@@ -24,7 +24,7 @@
 
   #map {
     width: 100vw;
-    height: calc(100vh - 250px); /* Adjust for header, controls, etc. */
+    height: calc(100% - 250px); /* Adjust for header, controls, etc. */
     max-height: 400px;
     background-color: #eef;
   }
