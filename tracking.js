@@ -146,7 +146,7 @@ updateTripTimer() {
   const mm = String(elapsed.getUTCMinutes()).padStart(2, "0");
   const ss = String(elapsed.getUTCSeconds()).padStart(2, "0");
   document.getElementById("trip-timer").textContent = `Trip Time: ${hh}:${mm}:${ss}`;
-  setTimeout(updateTripTimer, 1000);
+  setTimeout(MileApp.updateTripTimer, 1000);
 },
 // === Restore Last Trip ===
 restoreLastTrip() {
