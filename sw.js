@@ -1,24 +1,41 @@
 const CACHE_NAME = "MileApp-v2"; // ✅ Bump version to force refresh
 const urlsToCache = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/auth.js",
-  "/map.js",
-  "/tracking.js",
-  "/storage.js",
-  "/ui.js",
-  "/main.js",
-  "/manifest.json",
-  "/icon-192.png",
-  "/icon-512.png"
+  "./index.html",
+  "./style.css",
+  "./auth.js",
+  "./map.js",
+  "./tracking.js",
+  "./storage.js",
+  "./ui.js",
+  "./main.js",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png"
   ];
 
 // ✅ Install: Cache fresh files
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
+    caches.open(CACHE_NAME).then(async cache => {
+      try {
+        // Diagnostics: test each URL before caching
+        for (const url of urlsToCache) {
+          try {
+            const response = await fetch(url);
+            if (!response.ok) {
+              console.warn(`⚠️ Asset not found during caching: ${url}`);
+            }
+          } catch (err) {
+            console.warn(`❌ Fetch error for ${url}:`, err);
+          }
+        }
+
+        // Try to cache all
+        await cache.addAll(urlsToCache);
+        console.log("✅ Cached:", CACHE_NAME);
+      } catch (err) {
+        console.error("❌ Cache install failed:", err);
+      }
     })
   );
 });
