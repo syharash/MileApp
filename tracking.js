@@ -1,5 +1,5 @@
 let tracking = false;
-let tripStatus = 'idle';
+let window.tripStatus = 'idle';
 let trackingInterval = null;
 let tripStart = null;
 let tripEnd = null;
@@ -15,7 +15,7 @@ function startTracking() {
   tripStartTime = Date.now();
   document.getElementById("trip-timer").style.display = "block";
   updateTripTimer();
-  tripStatus = 'tracking';
+  window.tripStatus = 'tracking';
   initMapServices();
   navigator.geolocation.getCurrentPosition(pos => {
     tripStart = {
@@ -33,7 +33,7 @@ function startTracking() {
 
 function pauseTracking() {
   updateStatusBar("Paused");
-  tripStatus = 'paused';
+  window.tripStatus = 'paused';
   clearInterval(trackingInterval);
   trackingInterval = null;
   pauseStartTime = Date.now();
@@ -44,7 +44,7 @@ function pauseTracking() {
 
 function resumeTracking() {
   updateStatusBar("Tracking"); 
-  tripStatus = 'resumed';
+  window.tripStatus = 'resumed';
   trackingInterval = setInterval(() => {
     // poll location again
   }, 10000);
@@ -60,7 +60,7 @@ function resumeTracking() {
 async function endTracking() {
   updateStatusBar("Idle"); 
   document.getElementById("trip-timer").style.display = "none";
-  tripStatus = 'idle';
+  window.tripStatus = 'idle';
   navigator.geolocation.getCurrentPosition(async pos => {
     tripEnd = {
       latitude: pos.coords.latitude,
