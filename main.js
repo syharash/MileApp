@@ -1,5 +1,8 @@
 window.onload = function () {
-//  initMapServices();
+   if (!window.MileApp) {
+    console.error("🚫 MileApp not available — tracking functions can't be bound yet.");
+    return;
+  initMapServices();
   updateStatus("Idle");
   updateControls();
   loadTripHistory();
@@ -48,5 +51,8 @@ function handleMenuAction(action) {
     case "resume": MileApp.resumeTracking(); break;
     case "end": MileApp.endTracking(); break;
     case "download": MileApp.downloadCSV(false); break;
+    default: console.warn(`⚠️ Unknown menu action: ${action}`);
+
+  
   }
 }
