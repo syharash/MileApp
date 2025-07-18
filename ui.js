@@ -23,6 +23,42 @@ function updateTripStatusLabel(state) {
   banner.textContent = labels[state] || "–";
 }
 
+function updateStatus(state) {
+  const el = document.getElementById("tracking-status");
+  if (el) el.textContent = state;
+  document.body.classList.toggle("paused", state === "Paused");
+  document.body.classList.toggle("ended", state === "Ended" || state === "Trip Complete");
+}
+
+function updateControls() {
+  const startTrackingBtn = document.getElementById("startTrackingBtn");
+  const pauseTrackingBtn = document.getElementById("pauseTrackingBtn");
+  const resumeTrackingBtn = document.getElementById("resumeTrackingBtn");
+  const endTrackingBtn = document.getElementById("endTrackingBtn");
+
+  if (window.tripStatus === 'idle') {
+    startTrackingBtn.disabled = false;
+    pauseTrackingBtn.disabled = true;
+    resumeTrackingBtn.disabled = true;
+    endTrackingBtn.disabled = true;
+  } else if (window.tripStatus === 'tracking') {
+    startTrackingBtn.disabled = true;
+    pauseTrackingBtn.disabled = false;
+    resumeTrackingBtn.disabled = true;
+    endTrackingBtn.disabled = false;
+  } else if (window.tripStatus === 'paused') {
+    startTrackingBtn.disabled = true;
+    pauseTrackingBtn.disabled = true;
+    resumeTrackingBtn.disabled = false;
+    endTrackingBtn.disabled = true;
+  } else if (window.tripStatus === 'resumed') {
+    startTrackingBtn.disabled = true;
+    pauseTrackingBtn.disabled = false;
+    resumeTrackingBtn.disabled = true;
+    endTrackingBtn.disabled = false;
+  }
+}
+
 // === Show Toast with Style & Timeout ===
 function showToast(message, type = "info", duration = 3000) {
   const toast = document.createElement("div");
@@ -30,4 +66,9 @@ function showToast(message, type = "info", duration = 3000) {
   toast.textContent = message;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), duration);
+}
+
+function toggleHelp() {
+  const h = document.getElementById("help-screen");
+  h.style.display = h.style.display === "none" ? "block" : "none";
 }
