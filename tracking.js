@@ -67,7 +67,7 @@ startTracking() {
       }, () => console.warn("⚠️ Unable to access GPS during tracking"));
     }, 10000);
   }, () => showToast("⚠️ Unable to access GPS", "error"));
-}
+},
 pauseTracking() {
   MileApp.updateStatusBar("Paused");
   window.tripStatus = 'paused';
