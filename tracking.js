@@ -47,6 +47,7 @@ startTracking() {
     trackingPath.push(latLng);
     trackingPolyline.setPath(trackingPath);
     map.setCenter(latLng);
+    google.maps.event.trigger(map, 'resize');
     tracking = true;
 
     showToast("🚀 Trip started!");
