@@ -2,7 +2,7 @@
 * {
   box-sizing: border-box;
 }
-body {
+html, body {
   margin: 0;
   padding: 0;
   font-family: system-ui, sans-serif;
@@ -10,133 +10,89 @@ body {
   color: #222;
   font-size: 16px;
   line-height: 1.4;
+  height: 100%;
+  width: 100%;
 }
 
 /* === App Container === */
-.app-container {
+.container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow: hidden;
 }
 
-/* === Map View === */
-#map {
-  flex: 1;
-  width: 100%;
-  min-height: 40vh;
-  border: none;
-}
-
-/* === Trip Timer / Status === */
-#trip-timer,
-#trip-status-label {
-  font-size: 18px;
-  text-align: center;
-  padding: 8px;
-  background-color: #eef;
-  border-bottom: 1px solid #ccc;
-}
-
-/* === Split Layout Responsiveness === */
+/* === Split Layout (Stacked for Mobile) === */
 .split-layout {
   display: flex;
-  flex-direction: row;
-  height: 100%;
+  flex-direction: column;
+  flex-grow: 1;
+  height: auto;
 }
 
+/* === Sidebar (Collapsible Panel) === */
 .sidebar {
-  flex: 1;
+  width: 100%;
   padding: 16px;
-  background-color: #fff;
   overflow-y: auto;
+  background-color: #fff;
 }
 
+/* === Map Section === */
 .map-panel {
-  flex: 2;
+  width: 100%;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
-
 #map {
-  flex-grow: 1;
-  min-height: 300px;
   width: 100%;
+  height: 45vh;
+  max-height: 400px;
+}
+#trip-timer {
+  padding: 8px;
+  font-size: 18px;
+  text-align: center;
+  background-color: #eef;
 }
 
 /* === Status Bar === */
 #status-bar {
   font-size: 14px;
   text-align: center;
-  background-color: #ddf;
   padding: 6px;
+  background-color: #ddf;
   border-bottom: 1px solid #ccc;
 }
 
-/* === Media Query for Mobile Layout === */
-@media (max-width: 600px) {
-  .split-layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .sidebar,
-  .map-panel {
-    width: 100%;
-  }
-
-  .sidebar {
-    padding: 12px;
-  }
-
-  #trip-timer {
-    font-size: 16px;
-    padding: 8px;
-  }
-
-  button {
-    width: 100%;
-    font-size: 16px;
-    margin-bottom: 8px;
-  }
-
-  textarea,
-  input[type="text"],
-  input[type="number"] {
-    font-size: 16px;
-    padding: 8px;
-    width: 100%;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-
-  label {
-    font-weight: bold;
-    margin-bottom: 4px;
-    display: block;
-  }
+/* === Form Fields === */
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4px;
 }
-
-/* === Controls Section === */
-.controls {
-  padding: 12px;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 /* === Buttons === */
 button {
+  width: 100%;
   padding: 14px;
   font-size: 16px;
-  border-radius: 8px;
+  margin-bottom: 10px;
   border: none;
+  border-radius: 8px;
   background-color: #00BFFF;
   color: #fff;
-  width: 100%;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -146,23 +102,6 @@ button:hover {
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-}
-
-/* === Summary Section === */
-.summary {
-  padding: 12px;
-  background-color: #fff;
-  font-size: 15px;
-  border-top: 1px solid #ddd;
-}
-
-/* === Flash Feedback === */
-.flash {
-  animation: flashUpdate 0.8s ease-in-out;
-}
-@keyframes flashUpdate {
-  0% { background-color: #ffffcc; }
-  100% { background-color: transparent; }
 }
 
 /* === Toast Messages === */
@@ -183,7 +122,29 @@ button:disabled {
 .toast-error   { background-color: #e74c3c; }
 .toast-info    { background-color: #3498db; }
 
-/* === Responsive Adjustments === */
+/* === Trip Summary === */
+#trip-summary p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* === Flash Feedback === */
+.flash {
+  animation: flashUpdate 0.8s ease-in-out;
+}
+@keyframes flashUpdate {
+  0% { background-color: #ffffcc; }
+  100% { background-color: transparent; }
+}
+
+/* === Help Screen === */
+#help-screen {
+  padding: 16px;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+/* === Media Queries for Small Screens === */
 @media (max-width: 480px) {
   body {
     font-size: 15px;
@@ -192,78 +153,9 @@ button:disabled {
     font-size: 15px;
     padding: 12px;
   }
-}
-@media (max-width: 768px) {
-  .split-layout {
-    flex-direction: column;
-  }
-
-  .sidebar,
-  .map-panel {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .sidebar {
-    order: 2;
-  }
-
-  .map-panel {
-    order: 1;
-    min-height: 40vh;
-  }
-
-  button {
-    font-size: 16px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-
-  input[type="text"],
-  input[type="number"],
+  input,
   textarea {
-    font-size: 16px;
+    font-size: 15px;
     padding: 10px;
-    width: 100%;
-  }
-
-  label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  #trip-timer,
-  #trip-status-label,
-  #status-bar {
-    font-size: 16px;
-    text-align: center;
-    padding: 8px;
-  }
-}
-
-/* === Mobile Layout Adjustments === */
-@media (max-width: 768px) {
-  .split-layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .sidebar {
-    width: 100%;
-    padding: 12px;
-    order: 2;
-  }
-
-  .map-panel {
-    width: 100%;
-    min-height: 45vh;
-    order: 1;
-    padding: 0;
-  }
-
-  #map {
-    width: 100%;
-    height: 100%;
   }
 }
