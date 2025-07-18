@@ -117,7 +117,7 @@ function downloadCSV(useFiltered = false) {
   const a = document.createElement("a");
 
   a.href = url;
-  a.download = `${username}_${useFiltered ? "filtered_" : ""}trip_${tripId}_${timestamp}.csv`;
+  a.download = `${username}_${useFiltered ? "_" : ""}trip_${tripId}_${timestamp}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
