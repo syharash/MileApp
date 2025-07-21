@@ -121,7 +121,12 @@
   <div id="trip-timer" aria-live="polite">Trip Time: 00:00:00</div>
 
   <div id="map"></div>
-  <div id="directions-panel"></div>
+
+  <!-- Collapsible Direction Panel -->
+  <section id="route-wrapper">
+    <button id="toggleRouteBtn">📍 Show Route Details</button>
+    <div id="directions-panel" class="collapsed"></div>
+ </section>
 
   <!-- Help Screen -->
   <div id="help-screen" style="display:none;">
