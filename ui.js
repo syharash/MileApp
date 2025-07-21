@@ -72,3 +72,19 @@ function toggleHelp() {
   const h = document.getElementById("help-screen");
   h.style.display = h.style.display === "none" ? "block" : "none";
 }
+
+// === Toggle Directions Panel Visibility ===
+function initDirectionsPanelToggle() {
+  const toggleBtn = document.getElementById("toggleRouteBtn");
+  const panel = document.getElementById("directions-panel");
+
+  if (!toggleBtn || !panel) {
+    console.warn("⚠️ Directions toggle elements not found");
+    return;
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    panel.classList.toggle("collapsed");
+    panel.classList.toggle("expanded");
+  });
+}
