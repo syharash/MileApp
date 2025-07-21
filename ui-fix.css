@@ -43,3 +43,31 @@
     text-align: center;
   }
 }
+
+/* === Directions Panel Toggle === */
+#route-wrapper {
+  padding: 16px;
+}
+
+#toggleRouteBtn {
+  background-color: #00BFFF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+#directions-panel.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+#directions-panel.expanded {
+  max-height: 500px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+}
