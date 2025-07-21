@@ -55,3 +55,26 @@ function handleMenuAction(action) {
     default: console.warn(`⚠️ Unknown menu action: ${action}`);
   }
 }
+
+// === Toggle Directions Panel Visibility ===
+function initDirectionsPanelToggle() {
+  const toggleBtn = document.getElementById("toggleRouteBtn");
+  const panel = document.getElementById("directions-panel");
+
+  if (!toggleBtn || !panel) {
+    console.warn("⚠️ Directions toggle elements not found");
+    return;
+  }
+
+  // Start collapsed by default
+  panel.classList.add("collapsed");
+
+  toggleBtn.addEventListener("click", () => {
+    const isCollapsed = panel.classList.contains("collapsed");
+    panel.classList.toggle("collapsed", !isCollapsed);
+    panel.classList.toggle("expanded", isCollapsed);
+
+    // Optional: change button label on toggle
+    toggleBtn.textContent = isCollapsed ? "📍 Hide Route Details" : "📍 Show Route Details";
+  });
+}
